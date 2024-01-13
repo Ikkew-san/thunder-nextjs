@@ -1,113 +1,163 @@
-import Image from 'next/image'
+"use client";
+import { useEffect, useRef, useState } from "react";
+import PhoneFrom from "./components/phoneForm";
 
 export default function Home() {
+  const [phoneNumber, setPhoneNumber] = useState<string>("");
+
+  const actionBtnRef = useRef<HTMLButtonElement>(null);
+  const [element, setElement] = useState<string>("");
+
+  const [x, setX] = useState<number>(0);
+  const [y, setY] = useState<number>(0);
+  const [direction, setDirection] = useState<{ x: number; y: number }>({
+    x: 0,
+    y: 0,
+  });
+  const [action, setAction] = useState<boolean>(false);
+
+  const changeAction = () => {
+    const actionBtn = actionBtnRef.current;
+    if (!action) {
+      setAction(true);
+      actionBtn!.style.background = "red";
+      if (x == 0 && y == 0) {
+        randomDirection();
+        setX(Math.floor(Math.random() * 6 + 1));
+        setY(Math.floor(Math.random() * 6 + 1));
+      }
+      move();
+    } else if (action) {
+      setAction(false);
+      actionBtn!.style.background = "#ff7300";
+    }
+  };
+
+  const changeReset = async () => {
+    const actionBtn = actionBtnRef.current;
+    setElement("");
+    setAction(false);
+    setDirection({ x: 0, y: 0 });
+    setX(0);
+    setY(0);
+    actionBtn!.style.background = "#ff7300";
+  };
+
+  const move = () => {
+    let findDirection = false;
+    setElement(`${y}${x}`);
+    if (action) {
+      if (direction.x === 1) {
+        if (x != 6) {
+          setX(x + 1);
+        } else {
+          setX(x - 1);
+          findDirection = true;
+        }
+      } else if (direction.x === 2) {
+        if (x != 1) {
+          setX(x - 1);
+        } else {
+          setX(x + 1);
+          findDirection = true;
+        }
+      }
+
+      if (direction.y === 1) {
+        if (y != 6) {
+          setY(y + 1);
+        } else {
+          setY(y - 1);
+          findDirection = true;
+        }
+      } else if (direction.y === 2) {
+        if (y != 1) {
+          setY(y - 1);
+        } else {
+          setY(y + 1);
+          findDirection = true;
+        }
+      }
+
+      if (findDirection) randomDirection();
+    }
+  };
+
+  const randomDirection = () => {
+    let beforeX = direction.x;
+    let beforeY = direction.y;
+    do {
+      direction.x = Math.floor(Math.random() * 3);
+      direction.y = Math.floor(Math.random() * 3);
+    } while (direction.x == beforeX || direction.y == beforeY || direction.x === direction.y);
+  };
+
+  useEffect(() => {
+    if (action) {
+      setTimeout(() => {
+        move();
+      }, 500);
+    }
+  }),
+    [action];
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <main className="grid place-content-center h-screen w-screen">
+      <article className="flex flex-col space-y-10">
+        <section className="grid grid-cols-6">
+          <div className={`border border-black h-[50px] bg ${element === "11" ? "bg-green-400" : ""}`} id=""></div>
+          <div className={`border border-black h-[50px] ${element === "12" ? "bg-green-400" : ""}`} id=""></div>
+          <div className={`border border-black h-[50px] ${element === "13" ? "bg-green-400" : ""}`} id=""></div>
+          <div className={`border border-black h-[50px] ${element === "14" ? "bg-green-400" : ""}`} id=""></div>
+          <div className={`border border-black h-[50px] ${element === "15" ? "bg-green-400" : ""}`} id=""></div>
+          <div className={`border border-black h-[50px] ${element === "16" ? "bg-green-400" : ""}`} id=""></div>
+          <div className={`border border-black h-[50px] ${element === "21" ? "bg-green-400" : ""}`} id=""></div>
+          <div className={`border border-black h-[50px] ${element === "22" ? "bg-green-400" : ""}`} id=""></div>
+          <div className={`border border-black h-[50px] ${element === "23" ? "bg-green-400" : ""}`} id=""></div>
+          <div className={`border border-black h-[50px] ${element === "24" ? "bg-green-400" : ""}`} id=""></div>
+          <div className={`border border-black h-[50px] ${element === "25" ? "bg-green-400" : ""}`} id=""></div>
+          <div className={`border border-black h-[50px] ${element === "26" ? "bg-green-400" : ""}`} id=""></div>
+          <div className={`border border-black h-[50px] ${element === "31" ? "bg-green-400" : ""}`} id=""></div>
+          <div className={`border border-black h-[50px] ${element === "32" ? "bg-green-400" : ""}`} id=""></div>
+          <div className={`border border-black h-[50px] ${element === "33" ? "bg-green-400" : ""}`} id=""></div>
+          <div className={`border border-black h-[50px] ${element === "34" ? "bg-green-400" : ""}`} id=""></div>
+          <div className={`border border-black h-[50px] ${element === "35" ? "bg-green-400" : ""}`} id=""></div>
+          <div className={`border border-black h-[50px] ${element === "36" ? "bg-green-400" : ""}`} id=""></div>
+          <div className={`border border-black h-[50px] ${element === "41" ? "bg-green-400" : ""}`} id=""></div>
+          <div className={`border border-black h-[50px] ${element === "42" ? "bg-green-400" : ""}`} id=""></div>
+          <div className={`border border-black h-[50px] ${element === "43" ? "bg-green-400" : ""}`} id=""></div>
+          <div className={`border border-black h-[50px] ${element === "44" ? "bg-green-400" : ""}`} id=""></div>
+          <div className={`border border-black h-[50px] ${element === "45" ? "bg-green-400" : ""}`} id=""></div>
+          <div className={`border border-black h-[50px] ${element === "46" ? "bg-green-400" : ""}`} id=""></div>
+          <div className={`border border-black h-[50px] ${element === "51" ? "bg-green-400" : ""}`} id=""></div>
+          <div className={`border border-black h-[50px] ${element === "52" ? "bg-green-400" : ""}`} id=""></div>
+          <div className={`border border-black h-[50px] ${element === "53" ? "bg-green-400" : ""}`} id=""></div>
+          <div className={`border border-black h-[50px] ${element === "54" ? "bg-green-400" : ""}`} id=""></div>
+          <div className={`border border-black h-[50px] ${element === "55" ? "bg-green-400" : ""}`} id=""></div>
+          <div className={`border border-black h-[50px] ${element === "56" ? "bg-green-400" : ""}`} id=""></div>
+          <div className={`border border-black h-[50px] ${element === "61" ? "bg-green-400" : ""}`} id=""></div>
+          <div className={`border border-black h-[50px] ${element === "62" ? "bg-green-400" : ""}`} id=""></div>
+          <div className={`border border-black h-[50px] ${element === "63" ? "bg-green-400" : ""}`} id=""></div>
+          <div className={`border border-black h-[50px] ${element === "64" ? "bg-green-400" : ""}`} id=""></div>
+          <div className={`border border-black h-[50px] ${element === "65" ? "bg-green-400" : ""}`} id=""></div>
+          <div className={`border border-black h-[50px] ${element === "66" ? "bg-green-400" : ""}`} id=""></div>
+        </section>
+
+        <section className=" space-x-10">
+          <button
+            type="button"
+            ref={actionBtnRef}
+            onClick={changeAction}
+            className="actionBtn bg-[#ff7300] rounded-xl text-2xl font-bold py-2 px-8"
           >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
+            {!action ? "Start" : "Stop"}
+          </button>
+          <button type="button" onClick={changeReset} className="bg-[#7d7dff] rounded-xl text-2xl font-bold py-2 px-8">
+            Reset
+          </button>
+        </section>
+        <PhoneFrom phoneNumber={phoneNumber} setPhoneNumber={setPhoneNumber} />
+      </article>
     </main>
-  )
+  );
 }
